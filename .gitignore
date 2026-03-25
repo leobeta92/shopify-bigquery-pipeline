@@ -3,3 +3,6 @@ __pycache__/
 .env
 venv/
 bigquery-shopify/
+sample_response.json
+shopify_sample.txt
+output.txt
