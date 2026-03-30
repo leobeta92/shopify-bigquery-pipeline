@@ -11,3 +11,7 @@ table_sample_values.csv
 table_with_types.csv
 table_with_types.xlsx
 cloud_python_private_key.json
+bin/
+include/
+lib/
+pyvenv.cfg
