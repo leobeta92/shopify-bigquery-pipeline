@@ -6,3 +6,8 @@ bigquery-shopify/
 sample_response.json
 shopify_sample.txt
 output.txt
+table_sample_values_after_proc.csv
+table_sample_values.csv
+table_with_types.csv
+table_with_types.xlsx
+cloud_python_private_key.json
