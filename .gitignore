@@ -16,3 +16,4 @@ include/
 lib/
 pyvenv.cfg
 bulk-7506408014192.jsonl
+test_files/
