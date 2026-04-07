@@ -8,11 +8,19 @@ from datetime import datetime as dt
 import dateutil.parser as du
 import time
 
+import src.queries as queries
+
+from dotenv import load_dotenv
+from pathlib import Path
+
+load_dotenv(Path(__file__).parent.parent / ".env")
+
 merchant = os.getenv("MERCHANT")
 
 # Get Shopify credentials
 def get_credentials(client_id,secret):
 
+    # print(merchant)
     r = requests.post(
         f"https://{merchant}.myshopify.com/admin/oauth/access_token",
         headers={"Content-Type": "application/x-www-form-urlencoded"},
@@ -50,42 +58,28 @@ def status_update(status_query,token):
         json={"query": status_query}
     )
 
-    return r.json()
+    response = r.json()
+    print(response)
+    return response
 
-def modify_columns(df):
+def poll_for_result(token,interval_seconds=60, max_attempts=10):
+    for attempt in range(1, max_attempts + 1):
+        print(f"Attempt {attempt}/{max_attempts}...")
+        
+        bulk_status_response = status_update(queries.status,token)
+        
+        if (bulk_status_response['data']['currentBulkOperation']['status'] == 'COMPLETED' and bulk_status_response['data']['currentBulkOperation']['errorCode'] is None):
+            print("Done! File now available.")
 
-    # Column Definitions
-    b_num_columns = ['cartDiscountAmountSet','currentCartDiscountAmountSet','currentShippingPriceSet','currentSubtotalPriceSet','currentTotalDiscountsSet','currentTotalPriceSet','currentTotalTaxSet','originalTotalPriceSet','subtotalPriceSet','totalDiscountsSet','totalPriceSet']
-    b_date_cols = ['closedAt','createdAt','cancelledAt']
-    b_dict_columns = ["cancellation", "channelInformation","currentTaxLines","discountCodes","paymentGatewayNames","refunds","transactions"] 
+            url_results = bulk_status_response['data']['currentBulkOperation']['url']
+            result = requests.get(url_results)
+            contents = result.content
+            my_json = contents.decode('utf8')
+            orders = [json.loads(line) for line in my_json.strip().split('\n') if line.strip()]
+            return orders
 
-    # For dict/list items
-    for col in b_dict_columns:
+        print(f"Status: {bulk_status_response['data']['currentBulkOperation']['status']}. Retrying in {interval_seconds}s...")
+        time.sleep(interval_seconds)
 
-        if col == "refunds":
-            df[col] = df[col].apply(lambda x: sum(float(d['totalRefundedSet']['shopMoney']['amount']) for d in x) if x else 0)   
-        elif col == "currentTaxLines":
-            df[col] = df[col].apply(lambda x: json.dumps([float(d['priceSet']['shopMoney']['amount']) for d in x]) if x else None)
-        else:    
-            df[col] = df[col].apply(lambda x: json.dumps(x) if (isinstance(x, dict) or isinstance(x, list)) else None)
+    raise TimeoutError("Job did not complete within the allowed attempts.")
 
-
-    # Columns that need to be numbers
-    # Columns with strings that need to be converted to float
-
-    for col in b_num_columns:
-        if col == "cartDiscountAmountSet":
-            df[col] = df[col].apply(lambda x: float(x['shopMoney']['amount']) if x else 0)    
-        else:
-            df[col] = df[col].apply(lambda x: float(x['shopMoney']['amount']))
-
-    # Date Columns
-    for col in b_date_cols:
-        col_utc = col + '_utc'
-
-        if col == 'cancelledAt' or col == 'closedAt':
-            df[col_utc] = df[col].apply(lambda x: pd.to_datetime(x) if x is not None else None)
-        else:
-            df[col_utc] = df[col].apply(lambda x: pd.to_datetime(x))
-    
-    return df

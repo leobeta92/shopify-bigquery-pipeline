@@ -147,12 +147,12 @@ query {
 }
 """
 
-test = """
+backfill = """
         mutation {
   bulkOperationRunQuery(
    query: \"""
     query { 
-orders(query: "created_at:>=2026-02-23 created_at:<=2026-03-31") {
+orders(query: "created_at:>=2026-02-23 created_at:<=2026-04-06") {
 edges {
 node {
 id
