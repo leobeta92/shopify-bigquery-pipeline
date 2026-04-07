@@ -1,6 +1,0 @@
-{
-  "name": "shopify-functions",
-  "scripts": {
-    "start": "python server.py runserver"
-  }
-}
