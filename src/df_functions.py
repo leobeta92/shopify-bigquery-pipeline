@@ -1,5 +1,6 @@
 import pandas as pd
 import json
+import datetime
 
 def columns_for_df():
     columns=['id','name','email','createdAt','cancellation','cancelledAt','cancelReason','cartDiscountAmountSet','channelInformation','closed','closedAt','currentCartDiscountAmountSet','currentShippingPriceSet','currentSubtotalLineItemsQuantity','currentSubtotalPriceSet','currentTaxLines','currentTotalAdditionalFeesSet','currentTotalDiscountsSet','currentTotalPriceSet','currentTotalTaxSet','discountCode','discountCodes','displayFinancialStatus','displayFulfillmentStatus','fullyPaid','originalTotalPriceSet','paymentGatewayNames','refunds','registeredSourceUrl','returnStatus','sourceName','subtotalLineItemsQuantity','subtotalPriceSet','totalDiscountsSet','totalPriceSet','transactions'
@@ -172,4 +173,6 @@ def process_data(df):
         else:
             df[col_utc] = df[col].apply(lambda x: pd.to_datetime(x))
     
+    df['updatedAt'] = datetime.datetime.now()
+
     return df

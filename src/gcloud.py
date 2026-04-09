@@ -43,6 +43,7 @@ def bigquery_write_table_truncate(client, df, table_id):
         bigquery.SchemaField("closedAt_utc", bigquery.enums.SqlTypeNames.DATETIME),
         bigquery.SchemaField("createdAt_utc", bigquery.enums.SqlTypeNames.DATETIME),
         bigquery.SchemaField("cancelledAt_utc", bigquery.enums.SqlTypeNames.DATETIME),
+        bigquery.SchemaField("updated_at", bigquery.enums.SqlTypeNames.DATETIME),
     ],
         write_disposition="WRITE_TRUNCATE"
     )
@@ -100,6 +101,7 @@ def bigquery_write_table_append(client, df, table_id):
         bigquery.SchemaField("closedAt_utc", bigquery.enums.SqlTypeNames.DATETIME),
         bigquery.SchemaField("createdAt_utc", bigquery.enums.SqlTypeNames.DATETIME),
         bigquery.SchemaField("cancelledAt_utc", bigquery.enums.SqlTypeNames.DATETIME),
+        bigquery.SchemaField("updatedAt", bigquery.enums.SqlTypeNames.DATETIME),
     ],
         write_disposition="WRITE_APPEND"
     )
@@ -113,3 +115,22 @@ def bigquery_write_table_append(client, df, table_id):
             table.num_rows, len(table.schema), table_id
         )
     )
+
+def upsert_orders(client, query_orders_to_change, query_upsert):
+
+    query_job_orders_to_change = client.query(query_orders_to_change)  
+    query_job_orders_to_change.result()
+    
+    df = query_job_orders_to_change.to_dataframe()
+    print(
+    "{} rows to be updated".format(
+        df.shape[0]
+    )
+    )
+
+    if df.shape[0] > 0:
+        query_job_upsert = client.query(query_upsert)  
+        query_job_upsert.result()
+        print('Orders updated!')
+    else:
+        print('Nothing to modify! All current.')
