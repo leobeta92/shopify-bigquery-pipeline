@@ -24,8 +24,10 @@ SHOPIFY_CLIENT_ID = os.getenv("SHOPIFY_CLIENT_ID")
 SHOPIFY_SECRET = os.getenv("SHOPIFY_SECRET")
 
 # Load Google Cloud services account and BigQuery Client
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'cloud_python_private_key.json'
+if not os.environ.get('GOOGLE_APPLICATION_CREDENTIALS'):
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'cloud_python_private_key.json'
 client = bigquery.Client()
+
 ORDERS_UPDATE = os.getenv('ORDERS_UPDATE')
 
 # Get Shopify Token
