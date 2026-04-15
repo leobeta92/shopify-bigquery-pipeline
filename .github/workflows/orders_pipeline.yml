@@ -1,25 +1,26 @@
 # .github/workflows/pipeline.yml
 name: Run Orders Pipeline
 on:
-  schedule:
-    - cron: '0 9 * * *'
-    - cron: '0 10 * * *'
+    workflow_dispatch:
+#   schedule:
+#     - cron: '0 9 * * *'
+#     - cron: '0 10 * * *'
 jobs:
-  run-orders:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-      - run: pip install -r requirements.txt
-      - run: python orders.py
-        env:
-          ORDERS: ${{ secrets.ORDERS }}
-          ORDERS_UPDATE: ${{ secrets.ORDERS_UPDATE }}
-          SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
-          SHOPIFY_SECRET: ${{ secrets.SHOPIFY_SECRET }}
-          MERCHANT: ${{secrets.MERCHANT}}
+#   run-orders:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#       - uses: actions/setup-python@v4
+#         with:
+#           python-version: '3.11'
+#       - run: pip install -r requirements.txt
+#       - run: python orders.py
+#         env:
+#           ORDERS: ${{ secrets.ORDERS }}
+#           ORDERS_UPDATE: ${{ secrets.ORDERS_UPDATE }}
+#           SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
+#           SHOPIFY_SECRET: ${{ secrets.SHOPIFY_SECRET }}
+#           MERCHANT: ${{secrets.MERCHANT}}
 
   run-orders-update:
     runs-on: ubuntu-latest
