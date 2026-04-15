@@ -30,7 +30,7 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install -r requirements.txt
-      - run: python orders.py
+      - run: python orders_update.py
         env:
           ORDERS: ${{ secrets.ORDERS }}
           ORDERS_UPDATE: ${{ secrets.ORDERS_UPDATE }}
