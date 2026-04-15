@@ -46,4 +46,7 @@ new_df = dffx.process_data(orders_df_complete)
 table_id = ORDERS_UPDATE
 
 gcloud.bigquery_write_table_truncate(client, new_df, table_id)
+
+print('Query of Orders to Modify: ',queries.orders_to_modify)
+print('Query to Upsert: ',queries.upsert_orders)
 gcloud.upsert_orders(client,queries.orders_to_modify,queries.upsert_orders)

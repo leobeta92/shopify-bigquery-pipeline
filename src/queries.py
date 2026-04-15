@@ -6,6 +6,11 @@ today = dt.date.today()
 today_string = dt.date.strftime(dt.date.today(),'%Y-%m-%d')
 today_minus_30 = dt.date.strftime(today - dt.timedelta(days = 30),'%Y-%m-%d')
 
+from dotenv import load_dotenv
+from pathlib import Path
+
+load_dotenv(Path(__file__).parent.parent / ".env")
+
 # Importing table strings
 ORDERS = os.getenv('ORDERS')
 ORDERS_UPDATE = os.getenv('ORDERS_UPDATE')
@@ -461,7 +466,7 @@ where
 )
 
 # Upsert orders that have changed status since they were originally placed.
-upsert_orders = F'''
+upsert_orders = f'''
     MERGE `{ORDERS}` as so
     USING
     `{ORDERS_UPDATE}` as sou

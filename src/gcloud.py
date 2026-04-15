@@ -43,7 +43,7 @@ def bigquery_write_table_truncate(client, df, table_id):
         bigquery.SchemaField("closedAt_utc", bigquery.enums.SqlTypeNames.DATETIME),
         bigquery.SchemaField("createdAt_utc", bigquery.enums.SqlTypeNames.DATETIME),
         bigquery.SchemaField("cancelledAt_utc", bigquery.enums.SqlTypeNames.DATETIME),
-        bigquery.SchemaField("updated_at", bigquery.enums.SqlTypeNames.DATETIME),
+        bigquery.SchemaField("updatedAt", bigquery.enums.SqlTypeNames.DATETIME),
     ],
         write_disposition="WRITE_TRUNCATE"
     )
@@ -118,6 +118,7 @@ def bigquery_write_table_append(client, df, table_id):
 
 def upsert_orders(client, query_orders_to_change, query_upsert):
 
+    print('Starting upsert...')
     query_job_orders_to_change = client.query(query_orders_to_change)  
     query_job_orders_to_change.result()
     
