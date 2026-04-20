@@ -36,7 +36,7 @@ jobs:
             echo "SECRET IS SET - HELLO"
           fi
         env:
-          GCP_SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          TEST_SECRET: ${{ secrets.TEST_SECRET }}
       - run: |
           if [ -z "$TEST_SECRET_ENV" ]; then
             echo "SECRET IS EMPTY"
@@ -44,7 +44,7 @@ jobs:
             echo "SECRET IS SET - HELLO"
           fi
         env:
-          GCP_SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          TEST_SECRET: ${{ secrets.TEST_SECRET_ENV }}
 
       - run: pip install -r requirements.txt
       - run: python orders_update.py
