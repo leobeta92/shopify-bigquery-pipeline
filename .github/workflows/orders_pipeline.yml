@@ -29,6 +29,15 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
+      - run: |
+          if [ -z "$GCP_SERVICE_ACCOUNT_KEY" ]; then
+            echo "SECRET IS EMPTY"
+          else
+            echo "SECRET IS SET"
+          fi
+        env:
+          GCP_SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
 
       - run: pip install -r requirements.txt
       - run: python orders_update.py
@@ -37,5 +46,5 @@ jobs:
           ORDERS_UPDATE: ${{ secrets.ORDERS_UPDATE }}
           SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
           SHOPIFY_SECRET: ${{ secrets.SHOPIFY_SECRET }}
-          MERCHANT: ${{secrets.MERCHANT}}
+          MERCHANT: ${{ secrets.MERCHANT }}
           GCP_SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
