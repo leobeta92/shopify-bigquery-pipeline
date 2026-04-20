@@ -9,8 +9,6 @@ import src.utils as utils
 import src.df_functions as dffx
 import src.queries as queries
 import src.gcloud as gcloud
-from google.oauth2 import service_account
-
 
 # Datetime Packages
 from zoneinfo import ZoneInfo
@@ -19,6 +17,7 @@ import dateutil.parser as du
 import time
 
 # Services Libraries
+from google.oauth2 import service_account
 from google.cloud import bigquery
 
 # Load Shopify Secrets
