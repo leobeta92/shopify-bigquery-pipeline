@@ -30,10 +30,10 @@ jobs:
         with:
           python-version: '3.11'
       - run: |
-          if [ -z "$GCP_SERVICE_ACCOUNT_KEY" ]; then
+          if [ -z "$TEST_SECRET" ]; then
             echo "SECRET IS EMPTY"
           else
-            echo "SECRET IS SET"
+            echo "SECRET IS SET - HELLO"
           fi
         env:
           GCP_SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
