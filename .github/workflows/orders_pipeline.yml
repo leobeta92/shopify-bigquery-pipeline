@@ -23,6 +23,7 @@ jobs:
 
   run-orders-update:
     runs-on: ubuntu-latest
+    needs: run-orders
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
