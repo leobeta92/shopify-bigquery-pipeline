@@ -1,10 +1,9 @@
 # .github/workflows/pipeline.yml
 name: Run Orders Pipeline
 on:
-    workflow_dispatch:
-#   schedule:
-#     - cron: '0 9 * * *'
-#     - cron: '0 10 * * *'
+  schedule:
+    - cron: '0 9 * * *'
+    - cron: '0 10 * * *'
 jobs:
   run-orders:
     runs-on: ubuntu-latest
@@ -30,14 +29,6 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      - run: |
-          if [ -z "$TEST_SECRET" ]; then
-            echo "SECRET IS EMPTY"
-          else
-            echo "SECRET IS SET - HELLO"
-          fi
-        env:
-          TEST_SECRET: ${{ secrets.TEST_SECRET }}
 
       - run: pip install -r requirements.txt
       - run: python orders_update.py
