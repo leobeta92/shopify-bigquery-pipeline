@@ -3,7 +3,6 @@ name: Run Orders Pipeline
 on:
   schedule:
     - cron: '0 9 * * *'
-    - cron: '0 10 * * *'
 jobs:
   run-orders:
     runs-on: ubuntu-latest
