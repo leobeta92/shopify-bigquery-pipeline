@@ -29,6 +29,10 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
       - run: pip install -r requirements.txt
       - run: python orders_update.py
         env:
