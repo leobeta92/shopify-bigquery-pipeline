@@ -5,6 +5,7 @@ import os
 today = dt.date.today()
 today_string = dt.date.strftime(dt.date.today(),'%Y-%m-%d')
 today_minus_30 = dt.date.strftime(today - dt.timedelta(days = 30),'%Y-%m-%d')
+today_minus_15 = dt.date.strftime(today - dt.timedelta(days = 15),'%Y-%m-%d')
 
 from dotenv import load_dotenv
 from pathlib import Path
@@ -15,7 +16,8 @@ load_dotenv(Path(__file__).parent.parent / ".env")
 ORDERS = os.getenv('ORDERS')
 ORDERS_UPDATE = os.getenv('ORDERS_UPDATE')
 
-# Yesterday query
+# ORDERS
+# Yesterday query for orders
 
 yesterday = """
         mutation {
@@ -169,7 +171,7 @@ backfill = """
   bulkOperationRunQuery(
    query: \"""
     query { 
-orders(query: "created_at:>=2026-02-23 created_at:<=2026-04-06") {
+orders(query: "created_at:>=2026-02-23 created_at:<=2026-04-19") {
 edges {
 node {
 id
@@ -429,6 +431,7 @@ transactions {
 
 last_30_days = (last_30_days_pre.replace("{string_date}", today_minus_30)).replace("{today_string}",today_string)
 
+
 # How many orders have changed their status (refunded, fulfilled, etc.) since the order was first placed?
 orders_to_modify = (
     f'''
@@ -521,3 +524,4 @@ upsert_orders = f'''
         so.updatedAt = sou.updatedAt
 
 '''
+

@@ -7,12 +7,24 @@ def columns_for_df():
 ]
     return columns
 
+def columns_for_products_df():
+    columns = ['id','orderId','productId','name','sku','quantity','refundableQuantity','inventory','originalTotalSet','originalUnitPriceSet','discountedUnitPriceSet','discountedTotalSet','discountedUnitPriceAfterAllDiscountsSet','isGiftCard','taxLines']
+
+    return columns
+
 def create_df():
 
     orders_df_complete = pd.DataFrame(columns= columns_for_df())
 
     return orders_df_complete
     
+def create_products_df():
+
+    products_df_complete = pd.DataFrame(columns= columns_for_products_df())
+
+    return products_df_complete
+
+# ORDERS
 
 def add_data_to_df(orders):
 
@@ -175,4 +187,93 @@ def process_data(df):
     
     df['updatedAt'] = datetime.datetime.now()
 
+    return df
+
+# PRODUCTS
+
+def response_to_products(orders):
+    
+    products_table = []
+
+    for item in orders:
+        if '__parentId' in item.keys() and item['product'] is not None:
+            products_table.append(item)
+    
+    return products_table
+
+def add_product_data_to_df(orders):
+
+    # Resetting data frame
+    line_items_df = create_products_df()
+
+    # Resetting objects
+    id = []
+    orderId = []
+    productId = []
+    name = []
+    sku = []
+    quantity = []
+    refundableQuantity = []
+    inventory = []
+    isGiftCard = []
+    originalTotalSet = []
+    originalUnitPriceSet = []
+    discountedTotalSet = []
+    discountedUnitPriceSet = []
+    discountedUnitPriceAfterAllDiscountsSet = []
+    isGiftCard = []
+    taxLines = []
+
+    # Looping through data
+    for response in orders:
+        
+        # print(response)
+        id.append(response['id'])
+        orderId.append(response['__parentId'])
+        productId.append(response['product']['id'])
+        name.append(response['name'])
+        sku.append(response['sku'])
+        quantity.append(response['quantity'])
+        refundableQuantity.append(response['refundableQuantity'])
+        inventory.append(response['product']['totalInventory'])
+        originalTotalSet.append(response['originalTotalSet']['shopMoney']['amount'])
+        originalUnitPriceSet.append(response['originalUnitPriceSet']['shopMoney']['amount'])
+        discountedTotalSet.append(response['discountedTotalSet']['shopMoney']['amount'])
+        discountedUnitPriceSet.append(response['discountedUnitPriceSet']['shopMoney']['amount'])
+        discountedUnitPriceAfterAllDiscountsSet.append(response['discountedUnitPriceAfterAllDiscountsSet']['shopMoney']['amount'])
+        isGiftCard.append(response['isGiftCard'])
+        taxLines.append(response['taxLines'])
+
+    line_items_df['id'] = id
+    line_items_df['orderId'] = orderId
+    line_items_df['productId'] = productId
+    line_items_df['name'] = name
+    line_items_df['sku'] = sku
+    line_items_df['quantity'] = quantity
+    line_items_df['refundableQuantity'] = refundableQuantity
+    line_items_df['inventory'] = inventory
+    line_items_df['originalTotalSet'] = originalTotalSet
+    line_items_df['originalUnitPriceSet'] = originalUnitPriceSet
+    line_items_df['discountedTotalSet'] = discountedTotalSet
+    line_items_df['discountedUnitPriceSet'] = discountedUnitPriceSet
+    line_items_df['discountedUnitPriceAfterAllDiscountsSet'] = discountedUnitPriceAfterAllDiscountsSet
+    line_items_df['isGiftCard'] = isGiftCard
+    line_items_df['taxLines'] = taxLines
+    
+    return line_items_df
+
+def process_product_data(df):
+
+    num_columns = ['originalTotalSet','originalUnitPriceSet','discountedUnitPriceSet','discountedTotalSet','discountedUnitPriceAfterAllDiscountsSet']    
+
+    df['totalTax'] = df['taxLines'].apply(lambda x: sum(float(item['priceSet']['shopMoney']['amount']) for item in x) if x else 0)
+    df['taxLines'] = df['taxLines'].apply(lambda x: json.dumps(x) if (isinstance(x, dict) or isinstance(x, list)) else None)
+
+        # Columns that need to be numbers
+        # Columns with strings that need to be converted to float
+
+    for col in num_columns:
+
+        df[col] = df[col].apply(lambda x: float(x))
+    
     return df
