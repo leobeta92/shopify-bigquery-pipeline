@@ -75,6 +75,13 @@ lineItems {
           } # closing shopMoney        
         } # closing priceSet
       } # closing taxLines
+            variant {
+        inventoryItem {
+          unitCost {
+            amount
+          } # closing unitCost
+        } # closing inventoryItem
+      } # closing variant
       totalDiscountSet {
           shopMoney {
             amount
@@ -108,7 +115,7 @@ backfill_products = """
   bulkOperationRunQuery(
    query: \"""
     query { 
-orders(query: "created_at:>=2026-02-23 created_at:<=2026-04-21") {
+orders(query: "created_at:>=2026-02-23 created_at:<=2026-05-01") {
 edges {
 node {
 id
@@ -161,6 +168,13 @@ lineItems {
           } # closing shopMoney        
         } # closing priceSet
       } # closing taxLines
+            variant {
+        inventoryItem {
+          unitCost {
+            amount
+          } # closing unitCost
+        } # closing inventoryItem
+      } # closing variant
       totalDiscountSet {
           shopMoney {
             amount
@@ -254,6 +268,13 @@ lineItems {
             amount
           } # closing shopMoney         
       } # closing totalDiscountSet
+            variant {
+        inventoryItem {
+          unitCost {
+            amount
+          } # closing unitCost
+        } # closing inventoryItem
+      } # closing variant
     } # Closing node (lineItems)
   } # Closing edges (lineItems)
 

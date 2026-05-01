@@ -60,7 +60,8 @@ schema_products = schema = [
     bigquery.SchemaField("discountedUnitPriceAfterAllDiscountsSet", bigquery.enums.SqlTypeNames.FLOAT64),
     bigquery.SchemaField("isGiftCard", bigquery.enums.SqlTypeNames.BOOLEAN),
     bigquery.SchemaField("taxLines", bigquery.enums.SqlTypeNames.STRING),
-    bigquery.SchemaField("totalTax", bigquery.enums.SqlTypeNames.FLOAT64),
+    bigquery.SchemaField("totalTax", bigquery.enums.SqlTypeNames.FLOAT64),    
+    bigquery.SchemaField("unitCost", bigquery.enums.SqlTypeNames.FLOAT64),
 ]
 
 def bigquery_write_table_truncate(client, df, table_id, type = None):

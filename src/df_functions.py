@@ -8,7 +8,7 @@ def columns_for_df():
     return columns
 
 def columns_for_products_df():
-    columns = ['id','orderId','productId','name','sku','quantity','refundableQuantity','inventory','originalTotalSet','originalUnitPriceSet','discountedUnitPriceSet','discountedTotalSet','discountedUnitPriceAfterAllDiscountsSet','isGiftCard','taxLines']
+    columns = ['id','orderId','productId','name','sku','quantity','refundableQuantity','inventory','originalTotalSet','originalUnitPriceSet','discountedUnitPriceSet','discountedTotalSet','discountedUnitPriceAfterAllDiscountsSet','isGiftCard','taxLines','unitCost']
 
     return columns
 
@@ -226,6 +226,7 @@ def add_product_data_to_df(orders):
     discountedUnitPriceAfterAllDiscountsSet = []
     isGiftCard = []
     taxLines = []
+    unitCost = []
 
     # Looping through data
     for response in orders:
@@ -246,6 +247,14 @@ def add_product_data_to_df(orders):
         discountedUnitPriceAfterAllDiscountsSet.append(response['discountedUnitPriceAfterAllDiscountsSet']['shopMoney']['amount'])
         isGiftCard.append(response['isGiftCard'])
         taxLines.append(response['taxLines'])
+        if response['variant'] is not None:
+        # print(i,"-",response['variant']['inventoryItem']['unitCost']['amount'])
+            if response['variant']['inventoryItem']['unitCost'] is not None:
+                unitCost.append(response['variant']['inventoryItem']['unitCost']['amount'])
+            else:
+                unitCost.append(0)
+        else:
+            unitCost.append(0)     
 
     line_items_df['id'] = id
     line_items_df['orderId'] = orderId
@@ -262,12 +271,13 @@ def add_product_data_to_df(orders):
     line_items_df['discountedUnitPriceAfterAllDiscountsSet'] = discountedUnitPriceAfterAllDiscountsSet
     line_items_df['isGiftCard'] = isGiftCard
     line_items_df['taxLines'] = taxLines
-    
+    line_items_df['unitCost'] = unitCost
+
     return line_items_df
 
 def process_product_data(df):
 
-    num_columns = ['originalTotalSet','originalUnitPriceSet','discountedUnitPriceSet','discountedTotalSet','discountedUnitPriceAfterAllDiscountsSet']    
+    num_columns = ['originalTotalSet','originalUnitPriceSet','discountedUnitPriceSet','discountedTotalSet','discountedUnitPriceAfterAllDiscountsSet','unitCost']    
 
     df['totalTax'] = df['taxLines'].apply(lambda x: sum(float(item['priceSet']['shopMoney']['amount']) for item in x) if x else 0)
     df['taxLines'] = df['taxLines'].apply(lambda x: json.dumps(x) if (isinstance(x, dict) or isinstance(x, list)) else None)
