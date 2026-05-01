@@ -3,7 +3,7 @@ import json
 import datetime
 
 def columns_for_df():
-    columns=['id','name','email','createdAt','cancellation','cancelledAt','cancelReason','cartDiscountAmountSet','channelInformation','closed','closedAt','currentCartDiscountAmountSet','currentShippingPriceSet','currentSubtotalLineItemsQuantity','currentSubtotalPriceSet','currentTaxLines','currentTotalAdditionalFeesSet','currentTotalDiscountsSet','currentTotalPriceSet','currentTotalTaxSet','discountCode','discountCodes','displayFinancialStatus','displayFulfillmentStatus','fullyPaid','originalTotalPriceSet','paymentGatewayNames','refunds','registeredSourceUrl','returnStatus','sourceName','subtotalLineItemsQuantity','subtotalPriceSet','totalDiscountsSet','totalPriceSet','transactions'
+    columns=['id','name','email','createdAt','cancellation','cancelledAt','cancelReason','cartDiscountAmountSet','channelInformation','closed','closedAt','currentCartDiscountAmountSet','currentShippingPriceSet','currentSubtotalLineItemsQuantity','currentSubtotalPriceSet','currentTaxLines','currentTotalAdditionalFeesSet','currentTotalDiscountsSet','currentTotalPriceSet','currentTotalTaxSet','discountCode','discountCodes','displayFinancialStatus','displayFulfillmentStatus','fullyPaid','netPaymentSet','originalTotalPriceSet','paymentGatewayNames','refunds','registeredSourceUrl','returnStatus','sourceName','subtotalLineItemsQuantity','subtotalPriceSet','totalDiscountsSet','totalPriceSet','transactions'
 ]
     return columns
 
@@ -57,6 +57,7 @@ def add_data_to_df(orders):
     displayFinancialStatus = []
     displayFulfillmentStatus = []
     fullyPaid = []
+    netPaymentSet = []
     originalTotalPriceSet = []
     paymentGatewayNames = []
     refunds = []
@@ -97,6 +98,7 @@ def add_data_to_df(orders):
         displayFinancialStatus.append(response['displayFinancialStatus'])
         displayFulfillmentStatus.append(response['displayFulfillmentStatus'])
         fullyPaid.append(response['fullyPaid'])
+        netPaymentSet.append(response['netPaymentSet'])
         originalTotalPriceSet.append(response['originalTotalPriceSet'])
         paymentGatewayNames.append(response['paymentGatewayNames'])
         refunds.append(response['refunds'])
@@ -135,6 +137,7 @@ def add_data_to_df(orders):
     orders_df['displayFinancialStatus'] = displayFinancialStatus    
     orders_df['displayFulfillmentStatus'] = displayFulfillmentStatus
     orders_df['fullyPaid'] = fullyPaid
+    orders_df['netPaymentSet'] = netPaymentSet
     orders_df['originalTotalPriceSet'] = originalTotalPriceSet
     orders_df['paymentGatewayNames'] = paymentGatewayNames
     orders_df['refunds'] = refunds   
@@ -152,7 +155,7 @@ def add_data_to_df(orders):
 def process_data(df):
 
     # Column Definitions
-    b_num_columns = ['cartDiscountAmountSet','currentCartDiscountAmountSet','currentShippingPriceSet','currentSubtotalPriceSet','currentTotalDiscountsSet','currentTotalPriceSet','currentTotalTaxSet','originalTotalPriceSet','subtotalPriceSet','totalDiscountsSet','totalPriceSet']
+    b_num_columns = ['cartDiscountAmountSet','currentCartDiscountAmountSet','currentShippingPriceSet','currentSubtotalPriceSet','currentTotalDiscountsSet','currentTotalPriceSet','currentTotalTaxSet','netPaymentSet','originalTotalPriceSet','subtotalPriceSet','totalDiscountsSet','totalPriceSet']
     b_date_cols = ['closedAt','createdAt','cancelledAt']
     b_dict_columns = ["cancellation", "channelInformation","currentTaxLines","discountCodes","paymentGatewayNames","refunds","transactions"] 
 

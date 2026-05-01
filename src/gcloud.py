@@ -26,6 +26,7 @@ schema_orders = [
         bigquery.SchemaField("displayFinancialStatus", bigquery.enums.SqlTypeNames.STRING),
         bigquery.SchemaField("displayFulfillmentStatus", bigquery.enums.SqlTypeNames.STRING),
         bigquery.SchemaField("fullyPaid", bigquery.enums.SqlTypeNames.BOOLEAN),
+        bigquery.SchemaField("netPaymentSet", bigquery.enums.SqlTypeNames.FLOAT64),        
         bigquery.SchemaField("originalTotalPriceSet", bigquery.enums.SqlTypeNames.FLOAT64),
         bigquery.SchemaField("paymentGatewayNames", bigquery.enums.SqlTypeNames.STRING),
         bigquery.SchemaField("refunds", bigquery.enums.SqlTypeNames.FLOAT64),

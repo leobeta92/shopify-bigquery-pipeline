@@ -94,6 +94,11 @@ discountCodes
 displayFinancialStatus
 displayFulfillmentStatus
 fullyPaid
+netPaymentSet {
+    shopMoney {
+        amount
+        } # closes shopMoney
+    } # closes netPaymentSet
 originalTotalPriceSet {
     shopMoney {
         amount
@@ -171,7 +176,7 @@ backfill = """
   bulkOperationRunQuery(
    query: \"""
     query { 
-orders(query: "created_at:>=2026-02-23 created_at:<=2026-04-19") {
+orders(query: "created_at:>=2026-02-23 created_at:<=2026-04-30") {
 edges {
 node {
 id
@@ -241,6 +246,11 @@ discountCodes
 displayFinancialStatus
 displayFulfillmentStatus
 fullyPaid
+netPaymentSet {
+    shopMoney {
+        amount
+        } # closes shopMoney
+    } # closes netPaymentSet
 originalTotalPriceSet {
     shopMoney {
         amount
@@ -373,6 +383,11 @@ discountCodes
 displayFinancialStatus
 displayFulfillmentStatus
 fullyPaid
+netPaymentSet {
+    shopMoney {
+        amount
+        } # closes shopMoney
+    } # closes netPaymentSet
 originalTotalPriceSet {
     shopMoney {
         amount
@@ -443,6 +458,7 @@ orders_to_modify = (
   so.cancelReason as so_cancelReason,
   so.cancelledAt_utc as so_cancelledAt,
   so.closed as so_closed,
+  so.netPaymentSet as so_netPaymentSet,
 
   sou.returnStatus as sou_returnStatus,
   sou.fullyPaid as sou_fullyPaid,
@@ -452,7 +468,8 @@ orders_to_modify = (
   sou.cancelledAt_utc as sou_cancelledAt,
   sou.closed as sou_closed,
   sou.closedAt as sou_closedAt,
-  so.closedAt as so_closedAt
+  so.closedAt as so_closedAt,
+  sou.netPaymentSet as sou_netPaymentSet
 
 FROM {ORDERS} so
 INNER JOIN {ORDERS_UPDATE} sou
@@ -463,7 +480,8 @@ where
   so.displayFulfillmentStatus != sou.displayFulfillmentStatus OR
   so.displayFinancialStatus != sou.displayFinancialStatus OR
   so.cancelReason != sou.cancelReason OR
-  so.closed != sou.closed    
+  so.closed != sou.closed OR
+  so.netPaymentSet != sou.netPaymentSet
 
     '''
 )
@@ -482,7 +500,8 @@ upsert_orders = f'''
     so.displayFinancialStatus != sou.displayFinancialStatus OR
     so.cancelReason != sou.cancelReason OR
     so.cancellation != sou.cancellation OR
-    so.closed != sou.closed
+    so.closed != sou.closed OR
+    so.netPaymentSet != sou.netPaymentSet
     THEN 
     UPDATE SET
         so.createdAt = sou.createdAt,
@@ -507,6 +526,7 @@ upsert_orders = f'''
         so.displayFinancialStatus = sou.displayFinancialStatus,
         so.displayFulfillmentStatus = sou.displayFulfillmentStatus,
         so.fullyPaid = sou.fullyPaid,
+        so.netPaymentSet = sou.netPaymentSet,
         so.originalTotalPriceSet = sou.originalTotalPriceSet,
         so.paymentGatewayNames = sou.paymentGatewayNames,
         so.refunds = sou.refunds,
