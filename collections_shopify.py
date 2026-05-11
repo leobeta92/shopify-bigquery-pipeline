@@ -6,15 +6,9 @@ import json
 
 # Custom Functions
 import src.utils as utils
-import src.df_functions_orders as dffx
-import src.queries_product_orders as p_queries
+import src.df_functions_collections as cdffx
+import src.queries_collections as c_queries
 import src.gcloud as gcloud
-
-# Datetime Packages
-from zoneinfo import ZoneInfo
-from datetime import datetime as dt
-import dateutil.parser as du
-import time
 
 # Services Libraries
 from google.oauth2 import service_account
@@ -41,24 +35,28 @@ else:
     client = bigquery.Client()
 
 
-PRODUCTS = os.getenv('PRODUCTS')
+COLLECTIONS = os.getenv('COLLECTIONS')
+PRODUCTS_COLLECTIONS = os.getenv('PRODUCTS_COLLECTIONS')
 
 # Get Shopify Token
 SHOPIFY_ACCESS_TOKEN = utils.get_credentials(SHOPIFY_CLIENT_ID,SHOPIFY_SECRET)
 
 # Query Shopify API for yesterday's product line items sales data
-bulk_query_response = utils.bulk_query_request(p_queries.yesterday_products,SHOPIFY_ACCESS_TOKEN)
+bulk_query_response = utils.bulk_query_request(c_queries.collections_query,SHOPIFY_ACCESS_TOKEN)
 
 # Wait for the result to finish and then get the file.
-orders = utils.poll_for_result(SHOPIFY_ACCESS_TOKEN)
+collections_response = utils.poll_for_result(SHOPIFY_ACCESS_TOKEN)
 
-# Create a dataFrame and add data to it.
-products_table = dffx.response_to_products(orders)
-line_items = dffx.add_product_data_to_df(products_table)
+# Create a dataFrame and add data to it (for collections)
+split_response = cdffx.response_split(collections_response)
+collections_information = split_response['collections_information']
+products_collections_information = split_response['products_collections']
 
-# Process data prior to moving to BigQuery
-line_items_processed_df = dffx.process_product_data(line_items)
+collections_df = cdffx.add_collections_to_df(collections_information)
+products_collections_df = cdffx.add_products_collections_data_to_df(products_collections_information)
 
-table_id = PRODUCTS
+collections_table_id = COLLECTIONS
+products_collections_table_id = PRODUCTS_COLLECTIONS
 
-gcloud.bigquery_write_table_append(client, line_items_processed_df, table_id,'product')
+gcloud.bigquery_write_table_truncate(client, collections_df, collections_table_id,'collections')
+gcloud.bigquery_write_table_truncate(client, products_collections_df, products_collections_table_id,'products_collections')

@@ -1,0 +1,37 @@
+# .github/workflows/pipeline.yml
+name: Run Collections Pipeline
+on:
+  schedule:
+    - cron: '0 11 * * *'
+jobs:
+  run-variants-info:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - run: python variants_information.py
+        env:
+          VARIANTS: ${{ secrets.VARIANTS_INFORMATION }}
+          SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
+          SHOPIFY_SECRET: ${{ secrets.SHOPIFY_SECRET }}
+          MERCHANT: ${{ secrets.MERCHANT }}
+          GCP_SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+  
+  run-products-info:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - run: python products_information.py
+        env:
+          PRODUCTS_INFORMATION: ${{ secrets.PRODUCTS_INFORMATION }}
+          SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
+          SHOPIFY_SECRET: ${{ secrets.SHOPIFY_SECRET }}
+          MERCHANT: ${{ secrets.MERCHANT }}
+          GCP_SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}

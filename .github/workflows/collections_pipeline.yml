@@ -1,0 +1,22 @@
+# .github/workflows/pipeline.yml
+name: Run Collections Pipeline
+on:
+  schedule:
+    - cron: '30 10 * * *'
+jobs:
+  run-collections:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - run: python collections_shopify.py
+        env:
+          COLLECTIONS: ${{ secrets.COLLECTIONS }}
+          PRODUCTS_COLLECTIONS: ${{ secrets.PRODUCTS_COLLECTIONS }}
+          SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
+          SHOPIFY_SECRET: ${{ secrets.SHOPIFY_SECRET }}
+          MERCHANT: ${{ secrets.MERCHANT }}
+          GCP_SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}

@@ -2,22 +2,29 @@ import pandas as pd
 import json
 import datetime
 
+# Creating the columns for the necessary dataframes.
+
+# For orders df
 def columns_for_df():
     columns=['id','name','email','createdAt','cancellation','cancelledAt','cancelReason','cartDiscountAmountSet','channelInformation','closed','closedAt','currentCartDiscountAmountSet','currentShippingPriceSet','currentSubtotalLineItemsQuantity','currentSubtotalPriceSet','currentTaxLines','currentTotalAdditionalFeesSet','currentTotalDiscountsSet','currentTotalPriceSet','currentTotalTaxSet','discountCode','discountCodes','displayFinancialStatus','displayFulfillmentStatus','fullyPaid','netPaymentSet','originalTotalPriceSet','paymentGatewayNames','refunds','registeredSourceUrl','returnStatus','sourceName','subtotalLineItemsQuantity','subtotalPriceSet','totalDiscountsSet','totalPriceSet','transactions'
 ]
     return columns
 
+# For product line items df
 def columns_for_products_df():
     columns = ['id','orderId','productId','name','sku','quantity','refundableQuantity','inventory','originalTotalSet','originalUnitPriceSet','discountedUnitPriceSet','discountedTotalSet','discountedUnitPriceAfterAllDiscountsSet','isGiftCard','taxLines','unitCost']
 
     return columns
 
+# Creating the dataframes to process data and load into BigQuery.
+# Create orders dataframe.
 def create_df():
 
     orders_df_complete = pd.DataFrame(columns= columns_for_df())
 
     return orders_df_complete
-    
+
+# For products
 def create_products_df():
 
     products_df_complete = pd.DataFrame(columns= columns_for_products_df())
@@ -192,7 +199,7 @@ def process_data(df):
 
     return df
 
-# PRODUCTS
+# PRODUCTS LINE ITEMS
 
 def response_to_products(orders):
     

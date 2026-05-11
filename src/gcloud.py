@@ -64,6 +64,46 @@ schema_products = schema = [
     bigquery.SchemaField("unitCost", bigquery.enums.SqlTypeNames.FLOAT64),
 ]
 
+products_collections_schema = [
+    bigquery.SchemaField("id", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("collectionId", bigquery.enums.SqlTypeNames.STRING),
+]
+
+collections_schema = [
+    bigquery.SchemaField("id", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("title", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("productsInCollection", bigquery.enums.SqlTypeNames.INT64)
+]
+
+products_info_schema = [
+    bigquery.SchemaField("id", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("title", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("createdAt", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("handle", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("isGiftCard", bigquery.enums.SqlTypeNames.BOOLEAN),
+    bigquery.SchemaField("status", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("onlineStoreUrl", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("isClearance", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("publishedAt", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("createdAt_utc", bigquery.enums.SqlTypeNames.DATETIME),
+    bigquery.SchemaField("publishedAt_utc", bigquery.enums.SqlTypeNames.DATETIME),
+]
+
+variants_info_schema = [
+    bigquery.SchemaField("variantId", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("sku", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("productId", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("price", bigquery.enums.SqlTypeNames.FLOAT64),
+    bigquery.SchemaField("unitCost", bigquery.enums.SqlTypeNames.FLOAT64),
+    bigquery.SchemaField("availableForSale", bigquery.enums.SqlTypeNames.BOOLEAN),
+    bigquery.SchemaField("compareAtPrice", bigquery.enums.SqlTypeNames.FLOAT64),
+    bigquery.SchemaField("createdAt", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("inventoryQuantity", bigquery.enums.SqlTypeNames.INTEGER),
+    bigquery.SchemaField("updatedAt", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("createdAt_utc", bigquery.enums.SqlTypeNames.DATETIME),
+    bigquery.SchemaField("updatedAt_utc", bigquery.enums.SqlTypeNames.DATETIME),
+]
+
 def bigquery_write_table_truncate(client, df, table_id, type = None):
 
     if type == 'product':
@@ -71,6 +111,26 @@ def bigquery_write_table_truncate(client, df, table_id, type = None):
     schema = schema_products,
         write_disposition="WRITE_TRUNCATE"
     )
+    elif type == 'collections' :
+        job_config = bigquery.LoadJobConfig(
+    schema = collections_schema,
+        write_disposition="WRITE_TRUNCATE"
+    )   
+    elif type == 'products_collections' :
+        job_config = bigquery.LoadJobConfig(
+    schema = products_collections_schema,
+        write_disposition="WRITE_TRUNCATE"
+    )   
+    elif type == 'products_info':
+        job_config = bigquery.LoadJobConfig(
+    schema = products_info_schema,
+        write_disposition="WRITE_TRUNCATE"
+    )  
+    elif type == 'variants_info':
+        job_config = bigquery.LoadJobConfig(
+    schema = variants_info_schema,
+        write_disposition="WRITE_TRUNCATE"
+    )                
     else:
         job_config = bigquery.LoadJobConfig(
     schema = schema_orders,

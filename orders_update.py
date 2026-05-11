@@ -6,8 +6,8 @@ import json
 
 # Custom Functions
 import src.utils as utils
-import src.df_functions as dffx
-import src.queries as queries
+import src.df_functions_orders as dffx
+import src.queries_orders as queries
 import src.gcloud as gcloud
 
 # Datetime Packages
