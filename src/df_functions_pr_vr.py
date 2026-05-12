@@ -78,7 +78,10 @@ def create_variants_info_df(variants):
         
         # print(response)
         variantId.append(response['id'])
-        sku.append(response['sku'])
+        if response['sku'] is not None:
+            sku.append(response['sku'])
+        else:
+            sku.append('Not Assigned')
         productId.append(response['product']['id'])
         price.append(response['price'])
         if response['inventoryItem']['unitCost'] is not None:
