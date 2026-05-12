@@ -8,7 +8,7 @@ from datetime import datetime as dt
 import dateutil.parser as du
 import time
 
-import src.queries as queries
+import src.queries_status as status
 
 from dotenv import load_dotenv
 from pathlib import Path
@@ -66,7 +66,7 @@ def poll_for_result(token,interval_seconds=60, max_attempts=10):
     for attempt in range(1, max_attempts + 1):
         print(f"Attempt {attempt}/{max_attempts}...")
         
-        bulk_status_response = status_update(queries.status,token)
+        bulk_status_response = status_update(status.status,token)
         
         if (bulk_status_response['data']['currentBulkOperation']['status'] == 'COMPLETED' and bulk_status_response['data']['currentBulkOperation']['errorCode'] is None):
             print("Done! File now available.")

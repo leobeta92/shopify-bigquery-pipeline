@@ -1,0 +1,15 @@
+status = """
+query {
+  currentBulkOperation {
+    id
+    status
+    errorCode
+    createdAt
+    completedAt
+    objectCount
+    fileSize
+    url
+    partialDataUrl
+  }
+}
+"""

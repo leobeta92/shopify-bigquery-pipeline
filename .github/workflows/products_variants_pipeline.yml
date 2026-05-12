@@ -1,5 +1,5 @@
 # .github/workflows/pipeline.yml
-name: Run Collections Pipeline
+name: Run Products and Variants Pipeline
 on:
   schedule:
     - cron: '0 11 * * *'
