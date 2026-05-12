@@ -49,7 +49,7 @@ jobs:
       - run: pip install -r requirements.txt
       - run: python variants_information.py
         env:
-          VARIANTS: ${{ secrets.VARIANTS_INFORMATION }}
+          VARIANTS_INFORMATION: ${{ secrets.VARIANTS_INFORMATION }}
           SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
           SHOPIFY_SECRET: ${{ secrets.SHOPIFY_SECRET }}
           MERCHANT: ${{ secrets.MERCHANT }}
