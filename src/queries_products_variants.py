@@ -11,7 +11,6 @@ node {
     id
     title
     createdAt
-    handle
     isGiftCard
     status
     onlineStoreUrl

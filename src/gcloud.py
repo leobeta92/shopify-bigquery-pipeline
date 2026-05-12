@@ -78,7 +78,6 @@ products_info_schema = [
     bigquery.SchemaField("id", bigquery.enums.SqlTypeNames.STRING),
     bigquery.SchemaField("title", bigquery.enums.SqlTypeNames.STRING),
     bigquery.SchemaField("createdAt", bigquery.enums.SqlTypeNames.STRING),
-    bigquery.SchemaField("handle", bigquery.enums.SqlTypeNames.STRING),
     bigquery.SchemaField("isGiftCard", bigquery.enums.SqlTypeNames.BOOLEAN),
     bigquery.SchemaField("status", bigquery.enums.SqlTypeNames.STRING),
     bigquery.SchemaField("onlineStoreUrl", bigquery.enums.SqlTypeNames.STRING),

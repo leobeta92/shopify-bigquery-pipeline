@@ -3,7 +3,7 @@ import json
 import datetime
 
 def columns_for_products_info_df():
-    columns = ['id','title','createdAt','handle','isGiftCard','status','onlineStoreUrl','isClearance','publishedAt']
+    columns = ['id','title','createdAt','isGiftCard','status','onlineStoreUrl','isClearance','publishedAt']
     
     return columns
 
@@ -21,7 +21,6 @@ def create_products_info_df(products):
     id = []
     title = []
     createdAt = []
-    handle = []
     isGiftCard = []
     status = []
     onlineStoreUrl = []
@@ -35,7 +34,6 @@ def create_products_info_df(products):
         id.append(response['id'])
         title.append(response['title'])
         createdAt.append(response['createdAt'])
-        handle.append(response['handle'])
         isGiftCard.append(response['isGiftCard'])
         status.append(response['status'])
         onlineStoreUrl.append(response['onlineStoreUrl'])
@@ -49,7 +47,6 @@ def create_products_info_df(products):
     products_df['id'] = id
     products_df['title'] = title
     products_df['createdAt'] = createdAt
-    products_df['handle'] = handle
     products_df['isGiftCard'] = isGiftCard
     products_df['status'] = status
     products_df['onlineStoreUrl'] = onlineStoreUrl

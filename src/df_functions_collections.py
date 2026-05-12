@@ -5,12 +5,12 @@ import datetime
 # Creating the columns for the necessary dataframes.
 
 # Columns for collections.
-def columns_for_collections_df():
+def columns_for_products_collections_df():
     columns = ['id','collectionId']
     return columns
 
 # Columns for products and collections df
-def columns_for_products_collections_df():
+def columns_for_collections_df():
     columns = ['id','title','productsInCollection']
     return columns    
 
