@@ -13,13 +13,13 @@ jobs:
         with:
           python-version: '3.11'
       - run: |
-          if [ -z "$VARIANTS_INFORMATION" ]; then
+          if [ -z "$TEST_VARIANTS" ]; then
             echo "SECRET IS EMPTY"
           else
             echo "SECRET IS SET - HELLO. In repository secrets"
           fi
         env:
-          TEST_SECRET: ${{ secrets.VARIANTS_INFORMATION }}
+          TEST_VARIANTS: ${{ secrets.VARIANTS_INFORMATION }}
       - run: pip install -r requirements.txt
       - run: python variants_information.py
         env:
@@ -37,13 +37,13 @@ jobs:
         with:
           python-version: '3.11'
       - run: |
-          if [ -z "$PRODUCTS_INFORMATION" ]; then
+          if [ -z "$TEST_PRODUCTS" ]; then
             echo "SECRET IS EMPTY"
           else
             echo "SECRET IS SET - HELLO. In repository secrets"
           fi
         env:
-          TEST_SECRET: ${{ secrets.PRODUCTS_INFORMATION }}
+          TEST_PRODUCTS: ${{ secrets.PRODUCTS_INFORMATION }}
       - run: pip install -r requirements.txt
       - run: python products_information.py
         env:
