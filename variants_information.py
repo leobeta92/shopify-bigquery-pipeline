@@ -35,7 +35,7 @@ else:
     client = bigquery.Client()
 
 
-VARIANTS = os.getenv('VARIANTS_INFORMATION')
+VARIANTS_INFORMATION = os.getenv('VARIANTS_INFORMATION')
 
 # Get Shopify Token
 SHOPIFY_ACCESS_TOKEN = utils.get_credentials(SHOPIFY_CLIENT_ID,SHOPIFY_SECRET)
@@ -51,6 +51,6 @@ variants_response = utils.poll_for_result(SHOPIFY_ACCESS_TOKEN)
 variants_df = pv_dffx.create_variants_info_df(variants_response)
 variants_df_processed = pv_dffx.process_variant_data(variants_df)
 
-variants_table_id = VARIANTS
+variants_table_id = VARIANTS_INFORMATION
 
 gcloud.bigquery_write_table_truncate(client, variants_df_processed, variants_table_id,'variants_info')
