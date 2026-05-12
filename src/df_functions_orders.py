@@ -12,7 +12,7 @@ def columns_for_df():
 
 # For product line items df
 def columns_for_products_df():
-    columns = ['id','orderId','productId','name','sku','quantity','refundableQuantity','inventory','originalTotalSet','originalUnitPriceSet','discountedUnitPriceSet','discountedTotalSet','discountedUnitPriceAfterAllDiscountsSet','isGiftCard','taxLines','unitCost']
+    columns = ['id','orderId','productId','name','sku','quantity','refundableQuantity','originalTotalSet','originalUnitPriceSet','discountedUnitPriceSet','discountedTotalSet','discountedUnitPriceAfterAllDiscountsSet','isGiftCard','taxLines','unitCost']
 
     return columns
 
@@ -224,7 +224,6 @@ def add_product_data_to_df(orders):
     sku = []
     quantity = []
     refundableQuantity = []
-    inventory = []
     isGiftCard = []
     originalTotalSet = []
     originalUnitPriceSet = []
@@ -246,7 +245,6 @@ def add_product_data_to_df(orders):
         sku.append(response['sku'])
         quantity.append(response['quantity'])
         refundableQuantity.append(response['refundableQuantity'])
-        inventory.append(response['product']['totalInventory'])
         originalTotalSet.append(response['originalTotalSet']['shopMoney']['amount'])
         originalUnitPriceSet.append(response['originalUnitPriceSet']['shopMoney']['amount'])
         discountedTotalSet.append(response['discountedTotalSet']['shopMoney']['amount'])
@@ -270,7 +268,6 @@ def add_product_data_to_df(orders):
     line_items_df['sku'] = sku
     line_items_df['quantity'] = quantity
     line_items_df['refundableQuantity'] = refundableQuantity
-    line_items_df['inventory'] = inventory
     line_items_df['originalTotalSet'] = originalTotalSet
     line_items_df['originalUnitPriceSet'] = originalUnitPriceSet
     line_items_df['discountedTotalSet'] = discountedTotalSet

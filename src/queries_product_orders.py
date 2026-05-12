@@ -58,7 +58,6 @@ lineItems {
         isGiftCard
         status
         title
-        totalInventory
       } # closing product
       quantity
       refundableQuantity
@@ -151,7 +150,6 @@ lineItems {
         isGiftCard
         status
         title
-        totalInventory
       } # closing product
       quantity
       refundableQuantity
@@ -246,7 +244,6 @@ lineItems {
         isGiftCard
         status
         title
-        totalInventory
       } # closing product
       quantity
       refundableQuantity

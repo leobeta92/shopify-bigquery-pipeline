@@ -44,7 +44,7 @@ schema_orders = [
         bigquery.SchemaField("updatedAt", bigquery.enums.SqlTypeNames.DATETIME),
     ]
 
-schema_products = schema = [
+schema_products = [
     bigquery.SchemaField("id", bigquery.enums.SqlTypeNames.STRING),
     bigquery.SchemaField("orderId", bigquery.enums.SqlTypeNames.STRING),
     bigquery.SchemaField("productId", bigquery.enums.SqlTypeNames.STRING),
@@ -52,7 +52,6 @@ schema_products = schema = [
     bigquery.SchemaField("sku", bigquery.enums.SqlTypeNames.STRING),
     bigquery.SchemaField("quantity", bigquery.enums.SqlTypeNames.INTEGER),
     bigquery.SchemaField("refundableQuantity", bigquery.enums.SqlTypeNames.INTEGER),
-    bigquery.SchemaField("inventory", bigquery.enums.SqlTypeNames.INTEGER),
     bigquery.SchemaField("originalTotalSet", bigquery.enums.SqlTypeNames.FLOAT64),
     bigquery.SchemaField("originalUnitPriceSet", bigquery.enums.SqlTypeNames.FLOAT64),
     bigquery.SchemaField("discountedUnitPriceSet", bigquery.enums.SqlTypeNames.FLOAT64),
@@ -111,12 +110,12 @@ def bigquery_write_table_truncate(client, df, table_id, type = None):
     schema = schema_products,
         write_disposition="WRITE_TRUNCATE"
     )
-    elif type == 'collections' :
+    elif type == 'collections':
         job_config = bigquery.LoadJobConfig(
     schema = collections_schema,
         write_disposition="WRITE_TRUNCATE"
     )   
-    elif type == 'products_collections' :
+    elif type == 'products_collections':
         job_config = bigquery.LoadJobConfig(
     schema = products_collections_schema,
         write_disposition="WRITE_TRUNCATE"
