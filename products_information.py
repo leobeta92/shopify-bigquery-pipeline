@@ -35,7 +35,7 @@ else:
     client = bigquery.Client()
 
 
-PRODUCTS = os.getenv('PRODUCTS_INFORMATION')
+PRODUCTS_INFORMATION = os.getenv('PRODUCTS_INFORMATION')
 
 # Get Shopify Token
 SHOPIFY_ACCESS_TOKEN = utils.get_credentials(SHOPIFY_CLIENT_ID,SHOPIFY_SECRET)
@@ -51,6 +51,6 @@ products_response = utils.poll_for_result(SHOPIFY_ACCESS_TOKEN)
 products_df = pv_dffx.create_products_info_df(products_response)
 products_df_processed = pv_dffx.process_product_data(products_df)
 
-products_table_id = PRODUCTS
+products_table_id = PRODUCTS_INFORMATION
 
 gcloud.bigquery_write_table_truncate(client, products_df_processed, products_table_id,'products_info')
