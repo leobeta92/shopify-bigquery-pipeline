@@ -5,8 +5,34 @@ on:
     - cron: '0 11 * * *'
   workflow_dispatch:
 jobs:
+  run-products-info:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+        - uses: actions/setup-python@v4
+          with:
+            python-version: '3.11'
+        - run: |
+            if [ -z "$TEST_PRODUCTS" ]; then
+              echo "SECRET IS EMPTY"
+            else
+              echo "SECRET IS SET - HELLO. In repository secrets"
+            fi
+          env:
+            TEST_PRODUCTS: ${{ secrets.PRODUCTS_INFORMATION }}
+        - run: pip install -r requirements.txt
+        - run: python products_information.py
+          env:
+            PRODUCTS_INFORMATION: ${{ secrets.PRODUCTS_INFORMATION }}
+            SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
+            SHOPIFY_SECRET: ${{ secrets.SHOPIFY_SECRET }}
+            MERCHANT: ${{ secrets.MERCHANT }}
+            GCP_SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+
   run-variants-info:
     runs-on: ubuntu-latest
+    needs: run-products-info
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -24,31 +50,6 @@ jobs:
       - run: python variants_information.py
         env:
           VARIANTS: ${{ secrets.VARIANTS_INFORMATION }}
-          SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
-          SHOPIFY_SECRET: ${{ secrets.SHOPIFY_SECRET }}
-          MERCHANT: ${{ secrets.MERCHANT }}
-          GCP_SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-  
-  run-products-info:
-    runs-on: ubuntu-latest
-    needs: run-variants-info
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-      - run: |
-          if [ -z "$TEST_PRODUCTS" ]; then
-            echo "SECRET IS EMPTY"
-          else
-            echo "SECRET IS SET - HELLO. In repository secrets"
-          fi
-        env:
-          TEST_PRODUCTS: ${{ secrets.PRODUCTS_INFORMATION }}
-      - run: pip install -r requirements.txt
-      - run: python products_information.py
-        env:
-          PRODUCTS_INFORMATION: ${{ secrets.PRODUCTS_INFORMATION }}
           SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
           SHOPIFY_SECRET: ${{ secrets.SHOPIFY_SECRET }}
           MERCHANT: ${{ secrets.MERCHANT }}
