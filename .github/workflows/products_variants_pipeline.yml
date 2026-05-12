@@ -31,6 +31,7 @@ jobs:
   
   run-products-info:
     runs-on: ubuntu-latest
+    needs: run-variants-info
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
