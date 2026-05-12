@@ -11,6 +11,14 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
+      - run: |
+          if [ -z "$VARIANTS_INFORMATION" ]; then
+            echo "SECRET IS EMPTY"
+          else
+            echo "SECRET IS SET - HELLO. In repository secrets"
+          fi
+        env:
+          TEST_SECRET: ${{ secrets.VARIANTS_INFORMATION }}
       - run: pip install -r requirements.txt
       - run: python variants_information.py
         env:
@@ -27,6 +35,14 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
+      - run: |
+          if [ -z "$PRODUCTS_INFORMATION" ]; then
+            echo "SECRET IS EMPTY"
+          else
+            echo "SECRET IS SET - HELLO. In repository secrets"
+          fi
+        env:
+          TEST_SECRET: ${{ secrets.PRODUCTS_INFORMATION }}
       - run: pip install -r requirements.txt
       - run: python products_information.py
         env:
