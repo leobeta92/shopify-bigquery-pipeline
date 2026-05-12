@@ -74,7 +74,8 @@ lineItems {
           } # closing shopMoney        
         } # closing priceSet
       } # closing taxLines
-            variant {
+      variant {
+        id
         inventoryItem {
           unitCost {
             amount
@@ -114,7 +115,7 @@ backfill_products = """
   bulkOperationRunQuery(
    query: \"""
     query { 
-orders(query: "created_at:>=2026-02-23 created_at:<=2026-05-01") {
+orders(query: "created_at:>=2026-02-23 created_at:<=2026-05-11") {
 edges {
 node {
 id
@@ -166,7 +167,8 @@ lineItems {
           } # closing shopMoney        
         } # closing priceSet
       } # closing taxLines
-            variant {
+      variant {
+        id
         inventoryItem {
           unitCost {
             amount

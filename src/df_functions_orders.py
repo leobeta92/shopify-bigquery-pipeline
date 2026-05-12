@@ -12,7 +12,7 @@ def columns_for_df():
 
 # For product line items df
 def columns_for_products_df():
-    columns = ['id','orderId','productId','name','sku','quantity','refundableQuantity','originalTotalSet','originalUnitPriceSet','discountedUnitPriceSet','discountedTotalSet','discountedUnitPriceAfterAllDiscountsSet','isGiftCard','taxLines','unitCost']
+    columns = ['id','orderId','productId','variantId','quantity','refundableQuantity','originalTotalSet','originalUnitPriceSet','discountedUnitPriceSet','discountedTotalSet','discountedUnitPriceAfterAllDiscountsSet','isGiftCard','taxLines','unitCost']
 
     return columns
 
@@ -220,8 +220,7 @@ def add_product_data_to_df(orders):
     id = []
     orderId = []
     productId = []
-    name = []
-    sku = []
+    variantId = []
     quantity = []
     refundableQuantity = []
     isGiftCard = []
@@ -241,8 +240,10 @@ def add_product_data_to_df(orders):
         id.append(response['id'])
         orderId.append(response['__parentId'])
         productId.append(response['product']['id'])
-        name.append(response['name'])
-        sku.append(response['sku'])
+        if response['variant'] is not None:
+            variantId.append(response['variant']['id'])
+        else:
+            variantId.append('N/A')
         quantity.append(response['quantity'])
         refundableQuantity.append(response['refundableQuantity'])
         originalTotalSet.append(response['originalTotalSet']['shopMoney']['amount'])
@@ -264,8 +265,7 @@ def add_product_data_to_df(orders):
     line_items_df['id'] = id
     line_items_df['orderId'] = orderId
     line_items_df['productId'] = productId
-    line_items_df['name'] = name
-    line_items_df['sku'] = sku
+    line_items_df['variantId'] = variantId
     line_items_df['quantity'] = quantity
     line_items_df['refundableQuantity'] = refundableQuantity
     line_items_df['originalTotalSet'] = originalTotalSet
