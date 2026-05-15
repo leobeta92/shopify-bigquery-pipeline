@@ -126,6 +126,33 @@ totalDiscountsSet {
         amount
         } # closes shopMoney
         } # closes totalDiscountsSet
+totalReceivedSet {
+    shopMoney {
+        amount
+        } # closes shopMoney
+        } # closes totalReceivedSet
+totalRefundedSet {
+    shopMoney {
+        amount
+        } # closes shopMoney
+        } # closes totalRefundedSet
+totalRefundedShippingSet {
+    shopMoney {
+        amount
+        } # closes shopMoney
+        } # closes totalRefundedShippingSet   
+totalShippingPriceSet
+ {
+    shopMoney {
+        amount
+        } # closes shopMoney
+        } # closes totalShippingPriceSet
+totalTaxSet
+ {
+    shopMoney {
+        amount
+        } # closes shopMoney
+        } # closes totalTaxSet         
 totalPriceSet {
     shopMoney {
         amount
@@ -162,7 +189,7 @@ backfill = """
   bulkOperationRunQuery(
    query: \"""
     query { 
-orders(query: "created_at:>=2026-02-23 created_at:<=2026-04-30") {
+orders(query: "created_at:>=2026-02-23 created_at:<=2026-05-14") {
 edges {
 node {
 id
@@ -264,6 +291,33 @@ totalDiscountsSet {
         amount
         } # closes shopMoney
         } # closes totalDiscountsSet
+totalReceivedSet {
+    shopMoney {
+        amount
+        } # closes shopMoney
+        } # closes totalReceivedSet
+totalRefundedSet {
+    shopMoney {
+        amount
+        } # closes shopMoney
+        } # closes totalRefundedSet
+totalRefundedShippingSet {
+    shopMoney {
+        amount
+        } # closes shopMoney
+        } # closes totalRefundedShippingSet   
+totalShippingPriceSet
+ {
+    shopMoney {
+        amount
+        } # closes shopMoney
+        } # closes totalShippingPriceSet
+totalTaxSet
+ {
+    shopMoney {
+        amount
+        } # closes shopMoney
+        } # closes totalTaxSet         
 totalPriceSet {
     shopMoney {
         amount
@@ -401,6 +455,33 @@ totalDiscountsSet {
         amount
         } # closes shopMoney
         } # closes totalDiscountsSet
+totalReceivedSet {
+    shopMoney {
+        amount
+        } # closes shopMoney
+        } # closes totalReceivedSet
+totalRefundedSet {
+    shopMoney {
+        amount
+        } # closes shopMoney
+        } # closes totalRefundedSet
+totalRefundedShippingSet {
+    shopMoney {
+        amount
+        } # closes shopMoney
+        } # closes totalRefundedShippingSet   
+totalShippingPriceSet
+ {
+    shopMoney {
+        amount
+        } # closes shopMoney
+        } # closes totalShippingPriceSet
+totalTaxSet
+ {
+    shopMoney {
+        amount
+        } # closes shopMoney
+        } # closes totalTaxSet         
 totalPriceSet {
     shopMoney {
         amount
@@ -522,6 +603,11 @@ upsert_orders = f'''
         so.subtotalLineItemsQuantity = sou.subtotalLineItemsQuantity,
         so.subtotalPriceSet = sou.subtotalPriceSet,
         so.totalDiscountsSet = sou.totalDiscountsSet,
+        so.totalReceivedSet = sou.totalReceivedSet
+        so.totalRefundedSet = sou.totalRefundedSet
+        so.totalRefundedShippingSet = sou.totalRefundedShippingSet
+        so.totalShippingPriceSet = sou.totalShippingPriceSet
+        so.totalTaxSet = sou.totalTaxSet
         so.totalPriceSet = sou.totalPriceSet,
         so.transactions = sou.transactions,
         so.closedAt_utc = sou.closedAt_utc,

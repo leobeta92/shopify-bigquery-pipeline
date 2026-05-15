@@ -6,8 +6,7 @@ import datetime
 
 # For orders df
 def columns_for_df():
-    columns=['id','name','email','createdAt','cancellation','cancelledAt','cancelReason','cartDiscountAmountSet','channelInformation','closed','closedAt','currentCartDiscountAmountSet','currentShippingPriceSet','currentSubtotalLineItemsQuantity','currentSubtotalPriceSet','currentTaxLines','currentTotalAdditionalFeesSet','currentTotalDiscountsSet','currentTotalPriceSet','currentTotalTaxSet','discountCode','discountCodes','displayFinancialStatus','displayFulfillmentStatus','fullyPaid','netPaymentSet','originalTotalPriceSet','paymentGatewayNames','refunds','registeredSourceUrl','returnStatus','sourceName','subtotalLineItemsQuantity','subtotalPriceSet','totalDiscountsSet','totalPriceSet','transactions'
-]
+    columns=['id','name','email','createdAt','cancellation','cancelledAt','cancelReason','cartDiscountAmountSet','channelInformation','closed','closedAt','currentCartDiscountAmountSet','currentShippingPriceSet','currentSubtotalLineItemsQuantity','currentSubtotalPriceSet','currentTaxLines','currentTotalAdditionalFeesSet','currentTotalDiscountsSet','currentTotalPriceSet','currentTotalTaxSet','discountCode','discountCodes','displayFinancialStatus','displayFulfillmentStatus','fullyPaid','netPaymentSet','originalTotalPriceSet','paymentGatewayNames','refunds','registeredSourceUrl','returnStatus','sourceName','subtotalLineItemsQuantity','subtotalPriceSet','totalDiscountsSet','totalReceivedSet','totalRefundedSet','totalRefundedShippingSet','totalShippingPriceSet','totalTaxSet','totalPriceSet','transactions']
     return columns
 
 # For product line items df
@@ -74,6 +73,11 @@ def add_data_to_df(orders):
     subtotalLineItemsQuantity = []
     subtotalPriceSet = []
     totalDiscountsSet = []
+    totalReceivedSet = []
+    totalRefundedSet = []
+    totalRefundedShippingSet = []
+    totalShippingPriceSet = []
+    totalTaxSet = []
     totalPriceSet = []
     transactions = []
 
@@ -114,7 +118,14 @@ def add_data_to_df(orders):
         sourceName.append(response['sourceName'])
         subtotalLineItemsQuantity.append(response['subtotalLineItemsQuantity'])
         subtotalPriceSet.append(response['subtotalPriceSet'])
+
         totalDiscountsSet.append(response['totalDiscountsSet'])
+        totalReceivedSet.append(response['totalReceivedSet'])
+        totalRefundedSet.append(response['totalRefundedSet'])
+        totalRefundedShippingSet.append(response['totalRefundedShippingSet'])
+        totalShippingPriceSet.append(response['totalShippingPriceSet'])
+        totalTaxSet.append(response['totalTaxSet'])
+        
         totalPriceSet.append(response['totalPriceSet'])
         transactions.append(response['transactions'])
         
@@ -154,6 +165,11 @@ def add_data_to_df(orders):
     orders_df['subtotalLineItemsQuantity'] = subtotalLineItemsQuantity
     orders_df['subtotalPriceSet'] = subtotalPriceSet   
     orders_df['totalDiscountsSet'] = totalDiscountsSet
+    orders_df['totalReceivedSet'] = totalReceivedSet
+    orders_df['totalRefundedSet'] = totalRefundedSet
+    orders_df['totalRefundedShippingSet'] = totalRefundedShippingSet
+    orders_df['totalShippingPriceSet'] = totalShippingPriceSet
+    orders_df['totalTaxSet'] = totalTaxSet
     orders_df['totalPriceSet'] = totalPriceSet  
     orders_df['transactions'] = transactions  
 
@@ -162,7 +178,7 @@ def add_data_to_df(orders):
 def process_data(df):
 
     # Column Definitions
-    b_num_columns = ['cartDiscountAmountSet','currentCartDiscountAmountSet','currentShippingPriceSet','currentSubtotalPriceSet','currentTotalDiscountsSet','currentTotalPriceSet','currentTotalTaxSet','netPaymentSet','originalTotalPriceSet','subtotalPriceSet','totalDiscountsSet','totalPriceSet']
+    b_num_columns = ['cartDiscountAmountSet','currentCartDiscountAmountSet','currentShippingPriceSet','currentSubtotalPriceSet','currentTotalDiscountsSet','currentTotalPriceSet','currentTotalTaxSet','netPaymentSet','originalTotalPriceSet','subtotalPriceSet','totalDiscountsSet','totalPriceSet','totalReceivedSet','totalRefundedSet','totalRefundedShippingSet','totalShippingPriceSet','totalTaxSet']
     b_date_cols = ['closedAt','createdAt','cancelledAt']
     b_dict_columns = ["cancellation", "channelInformation","currentTaxLines","discountCodes","paymentGatewayNames","refunds","transactions"] 
 
