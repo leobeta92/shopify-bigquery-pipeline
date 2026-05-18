@@ -2,11 +2,16 @@ import pandas as pd
 import json
 import datetime
 
+# In case import has orders that contain previous BigCommerce naming:
+def filter_orders(orders):
+    return [o for o in orders if not o['name'].startswith('1200')]
+
+
 # Creating the columns for the necessary dataframes.
 
 # For orders df
 def columns_for_df():
-    columns=['id','name','email','createdAt','cancellation','cancelledAt','cancelReason','cartDiscountAmountSet','channelInformation','closed','closedAt','currentCartDiscountAmountSet','currentShippingPriceSet','currentSubtotalLineItemsQuantity','currentSubtotalPriceSet','currentTaxLines','currentTotalAdditionalFeesSet','currentTotalDiscountsSet','currentTotalPriceSet','currentTotalTaxSet','discountCode','discountCodes','displayFinancialStatus','displayFulfillmentStatus','fullyPaid','netPaymentSet','originalTotalPriceSet','paymentGatewayNames','refunds','registeredSourceUrl','returnStatus','sourceName','subtotalLineItemsQuantity','subtotalPriceSet','totalDiscountsSet','totalReceivedSet','totalRefundedSet','totalRefundedShippingSet','totalShippingPriceSet','totalTaxSet','totalPriceSet','transactions']
+    columns=['id','name','email','createdAt','cancellation','cancelledAt','cancelReason','cartDiscountAmountSet','channelInformation','closed','closedAt','currentCartDiscountAmountSet','currentShippingPriceSet','currentSubtotalLineItemsQuantity','currentSubtotalPriceSet','currentTaxLines','currentTotalAdditionalFeesSet','currentTotalDiscountsSet','currentTotalPriceSet','currentTotalTaxSet','discountCode','discountCodes','displayFinancialStatus','displayFulfillmentStatus','fullyPaid','netPaymentSet','originalTotalPriceSet','paymentGatewayNames','refunds','registeredSourceUrl','returnStatus','sourceName','subtotalLineItemsQuantity','subtotalPriceSet','totalDiscountsSet','totalReceivedSet','totalRefundedSet','totalRefundedShippingSet','totalShippingPriceSet','totalTaxSet','totalPriceSet','transactions','shippingDiscount','shippingAfterDiscount','originalShippingPrice']
     return columns
 
 # For product line items df
@@ -80,6 +85,9 @@ def add_data_to_df(orders):
     totalTaxSet = []
     totalPriceSet = []
     transactions = []
+    shippingDiscount = [] 
+    shippingAfterDiscount = [] 
+    originalShippingPrice = []
 
     # Looping through data
     for response in orders:
@@ -128,7 +136,18 @@ def add_data_to_df(orders):
         
         totalPriceSet.append(response['totalPriceSet'])
         transactions.append(response['transactions'])
-        
+        if response['shippingLine'] is not None:
+            if response['shippingLine']['discountAllocations'] is not None:
+                shippingDiscount.append(response['shippingLine']['discountAllocations']) 
+            else:
+                shippingDiscount.append([])
+            shippingAfterDiscount.append(response['shippingLine']['discountedPriceSet']['shopMoney']['amount']) 
+            originalShippingPrice.append(response['shippingLine']['originalPriceSet']['shopMoney']['amount'])
+        else:
+            shippingDiscount.append([])
+            shippingAfterDiscount.append(0) 
+            originalShippingPrice.append(0)
+
     # Populate new table
     orders_df['id'] = id
     orders_df['name'] = name
@@ -171,22 +190,28 @@ def add_data_to_df(orders):
     orders_df['totalShippingPriceSet'] = totalShippingPriceSet
     orders_df['totalTaxSet'] = totalTaxSet
     orders_df['totalPriceSet'] = totalPriceSet  
-    orders_df['transactions'] = transactions  
+    orders_df['transactions'] = transactions 
+     
+    orders_df['shippingDiscount'] =  shippingDiscount
+    orders_df['shippingAfterDiscount'] = shippingAfterDiscount
+    orders_df['originalShippingPrice'] = originalShippingPrice
 
     return orders_df
 
 def process_data(df):
 
     # Column Definitions
-    b_num_columns = ['cartDiscountAmountSet','currentCartDiscountAmountSet','currentShippingPriceSet','currentSubtotalPriceSet','currentTotalDiscountsSet','currentTotalPriceSet','currentTotalTaxSet','netPaymentSet','originalTotalPriceSet','subtotalPriceSet','totalDiscountsSet','totalPriceSet','totalReceivedSet','totalRefundedSet','totalRefundedShippingSet','totalShippingPriceSet','totalTaxSet']
+    b_num_columns = ['cartDiscountAmountSet','currentCartDiscountAmountSet','currentShippingPriceSet','currentSubtotalPriceSet','currentTotalDiscountsSet','currentTotalPriceSet','currentTotalTaxSet','netPaymentSet','originalTotalPriceSet','subtotalPriceSet','totalDiscountsSet','totalPriceSet','totalReceivedSet','totalRefundedSet','totalRefundedShippingSet','totalShippingPriceSet','totalTaxSet','shippingAfterDiscount','originalShippingPrice']
     b_date_cols = ['closedAt','createdAt','cancelledAt']
-    b_dict_columns = ["cancellation", "channelInformation","currentTaxLines","discountCodes","paymentGatewayNames","refunds","transactions"] 
+    b_dict_columns = ["cancellation", "channelInformation","currentTaxLines","discountCodes","paymentGatewayNames","refunds","transactions","shippingDiscount"] 
 
     # For dict/list items
     for col in b_dict_columns:
 
         if col == "refunds":
-            df[col] = df[col].apply(lambda x: sum(float(d['totalRefundedSet']['shopMoney']['amount']) for d in x) if x else 0)   
+            df[col] = df[col].apply(lambda x: sum(float(d['totalRefundedSet']['shopMoney']['amount']) for d in x) if x else 0)
+        elif col == "shippingDiscount":
+            df[col] = df[col].apply(lambda x: sum([float(d['allocatedAmountSet']['shopMoney']['amount']) for d in x]))           
         elif col == "currentTaxLines":
             df[col] = df[col].apply(lambda x: json.dumps([float(d['priceSet']['shopMoney']['amount']) for d in x]) if x else None)
         else:    
@@ -198,7 +223,9 @@ def process_data(df):
 
     for col in b_num_columns:
         if col == "cartDiscountAmountSet":
-            df[col] = df[col].apply(lambda x: float(x['shopMoney']['amount']) if x else 0)    
+            df[col] = df[col].apply(lambda x: float(x['shopMoney']['amount']) if x else 0) 
+        elif col == 'shippingAfterDiscount' or col == 'originalShippingPrice':
+            df[col] = df[col].apply(lambda x: float(x))
         else:
             df[col] = df[col].apply(lambda x: float(x['shopMoney']['amount']))
 

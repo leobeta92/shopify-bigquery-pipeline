@@ -37,8 +37,11 @@ bulk_query_response = utils.bulk_query_request(queries.backfill,SHOPIFY_ACCESS_T
 # Wait for the result to finish and then get the file.
 orders = utils.poll_for_result(SHOPIFY_ACCESS_TOKEN)
 
+# Filter out orders that may start with 1200 and mess up functions downstream.
+filtered_orders = dffx.filter_orders(orders)
+
 # Create a dataFrame and add data to it.
-orders_df_complete = dffx.add_data_to_df(orders)
+orders_df_complete = dffx.add_data_to_df(filtered_orders)
 
 # Process data prior to moving to BigQuery
 new_df = dffx.process_data(orders_df_complete)

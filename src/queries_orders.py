@@ -158,6 +158,31 @@ totalPriceSet {
         amount
         } # closes shopMoney
         } # closes totalPriceSet
+shippingLine {
+        title
+        discountAllocations {
+                allocatedAmountSet {
+                    shopMoney {
+                        amount
+                    } # close shopMoney
+                } # close allocatedAmountSet
+            }    # close discountAllocations        
+        currentDiscountedPriceSet {
+                shopMoney {
+                    amount
+                } # close shopMoney                
+        } # close currentDiscountedPriceSet   
+        discountedPriceSet {
+                shopMoney {
+                    amount
+                } # close shopMoney
+        } # close discountedPriceSet   
+        originalPriceSet {
+                shopMoney {
+                    amount
+                } # close shopMoney
+        } # close originalPriceSet        
+} # closes shippingLine
 transactions {
     device {
         id
@@ -189,7 +214,7 @@ backfill = """
   bulkOperationRunQuery(
    query: \"""
     query { 
-orders(query: "created_at:>=2026-02-23 created_at:<=2026-05-14") {
+orders(query: "created_at:>=2026-02-23 created_at:<=2026-05-17") {
 edges {
 node {
 id
@@ -323,6 +348,31 @@ totalPriceSet {
         amount
         } # closes shopMoney
         } # closes totalPriceSet
+shippingLine {
+        title
+        discountAllocations {
+                allocatedAmountSet {
+                    shopMoney {
+                        amount
+                    } # close shopMoney
+                } # close allocatedAmountSet
+            }    # close discountAllocations        
+        currentDiscountedPriceSet {
+                shopMoney {
+                    amount
+                } # close shopMoney                
+        } # close currentDiscountedPriceSet   
+        discountedPriceSet {
+                shopMoney {
+                    amount
+                } # close shopMoney
+        } # close discountedPriceSet   
+        originalPriceSet {
+                shopMoney {
+                    amount
+                } # close shopMoney
+        } # close originalPriceSet        
+} # closes shippingLine
 transactions {
     device {
         id
@@ -487,6 +537,31 @@ totalPriceSet {
         amount
         } # closes shopMoney
         } # closes totalPriceSet
+shippingLine {
+        title
+        discountAllocations {
+                allocatedAmountSet {
+                    shopMoney {
+                        amount
+                    } # close shopMoney
+                } # close allocatedAmountSet
+            }    # close discountAllocations        
+        currentDiscountedPriceSet {
+                shopMoney {
+                    amount
+                } # close shopMoney                
+        } # close currentDiscountedPriceSet   
+        discountedPriceSet {
+                shopMoney {
+                    amount
+                } # close shopMoney
+        } # close discountedPriceSet   
+        originalPriceSet {
+                shopMoney {
+                    amount
+                } # close shopMoney
+        } # close originalPriceSet        
+} # closes shippingLine
 transactions {
     device {
         id
@@ -610,6 +685,9 @@ upsert_orders = f'''
         so.totalTaxSet = sou.totalTaxSet,
         so.totalPriceSet = sou.totalPriceSet,
         so.transactions = sou.transactions,
+        so.shippingDiscount = sou.shippingDiscount,
+        so.shippingAfterDiscount = sou.shippingAfterDiscount,
+        so.originalShippingPrice = sou.originalShippingPrice,
         so.closedAt_utc = sou.closedAt_utc,
         so.createdAt_utc = sou.createdAt_utc,
         so.cancelledAt_utc = sou.cancelledAt_utc,

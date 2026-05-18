@@ -63,6 +63,10 @@ def status_update(status_query,token):
     return response
 
 def poll_for_result(token,interval_seconds=60, max_attempts=10):
+    
+    print("Waiting 15 seconds for job to complete...")
+    time.sleep(15)
+
     for attempt in range(1, max_attempts + 1):
         print(f"Attempt {attempt}/{max_attempts}...")
         
