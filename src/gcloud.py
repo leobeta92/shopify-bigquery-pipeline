@@ -109,6 +109,54 @@ variants_info_schema = [
     bigquery.SchemaField("updatedAt_utc", bigquery.enums.SqlTypeNames.DATETIME),
 ]
 
+schema_orders_addresses = [
+    bigquery.SchemaField("id", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("name", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("email", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("createdAt", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("billing_address1", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("billing_address2", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("billing_city", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("billing_company", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("billing_coordinatesValidated", bigquery.enums.SqlTypeNames.BOOLEAN),
+    bigquery.SchemaField("billing_country", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("billing_countryCodeV2", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("billing_firstName", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("billing_formattedArea", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("billing_id", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("billing_lastName", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("billing_latitude", bigquery.enums.SqlTypeNames.FLOAT64),
+    bigquery.SchemaField("billing_longitude", bigquery.enums.SqlTypeNames.FLOAT64),
+    bigquery.SchemaField("billing_name", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("billing_phone", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("billing_province", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("billing_provinceCode", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("billing_timeZone", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("billing_validationResultSummary", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("billing_zip", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("billingAddressMatchesShippingAddress", bigquery.enums.SqlTypeNames.BOOLEAN),
+    bigquery.SchemaField("shipping_address1", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("shipping_address2", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("shipping_city", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("shipping_company", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("shipping_coordinatesValidated", bigquery.enums.SqlTypeNames.BOOLEAN),
+    bigquery.SchemaField("shipping_country", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("shipping_countryCodeV2", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("shipping_firstName", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("shipping_formattedArea", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("shipping_id", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("shipping_lastName", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("shipping_latitude", bigquery.enums.SqlTypeNames.FLOAT64),
+    bigquery.SchemaField("shipping_longitude", bigquery.enums.SqlTypeNames.FLOAT64),
+    bigquery.SchemaField("shipping_name", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("shipping_phone", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("shipping_province", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("shipping_provinceCode", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("shipping_timeZone", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("shipping_validationResultSummary", bigquery.enums.SqlTypeNames.STRING),
+    bigquery.SchemaField("shipping_zip", bigquery.enums.SqlTypeNames.STRING),
+]
+
 def bigquery_write_table_truncate(client, df, table_id, type = None):
 
     if type == 'product':
@@ -135,7 +183,12 @@ def bigquery_write_table_truncate(client, df, table_id, type = None):
         job_config = bigquery.LoadJobConfig(
     schema = variants_info_schema,
         write_disposition="WRITE_TRUNCATE"
-    )                
+    )       
+    elif type == 'orders_addresses':
+        job_config = bigquery.LoadJobConfig(
+    schema = schema_orders_addresses,
+        write_disposition="WRITE_TRUNCATE"
+    )            
     else:
         job_config = bigquery.LoadJobConfig(
     schema = schema_orders,
@@ -159,6 +212,11 @@ def bigquery_write_table_append(client, df, table_id, type = None):
     schema = schema_products,
         write_disposition="WRITE_APPEND"
     )
+    elif type == 'orders_addresses':
+        job_config = bigquery.LoadJobConfig(
+    schema = schema_orders_addresses,
+        write_disposition="WRITE_APPEND"
+    )   
     else:   
         job_config = bigquery.LoadJobConfig(
     schema = schema_orders,

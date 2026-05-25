@@ -1,0 +1,22 @@
+# .github/workflows/pipeline.yml
+name: Run Orders Addresses Pipeline
+on:
+  schedule:
+    - cron: '0 20 * * 1'
+jobs:
+  run-orders:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - run: python orders_addresses.py
+        env:
+          ORDERS_ADDRESSES: ${{ secrets.ORDERS_ADDRESSES }}
+          SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
+          SHOPIFY_SECRET: ${{ secrets.SHOPIFY_SECRET }}
+          MERCHANT: ${{ secrets.MERCHANT }}
+          GCP_SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
