@@ -32,11 +32,3 @@ shopify_notebook_with_orders.ipynb
 billing_addresses_functions_export.csv
 billing_addresses_since_feb23.csv
 orders_sample_post_filter.txt
-# Temporary Exclusion
-orders.py
-products_information.py
-products_sales.py
-products_sales_update.py
-variants_information.py
-orders_addresses.py
-collections_shopify.py
