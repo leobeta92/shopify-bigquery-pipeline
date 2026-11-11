@@ -18,3 +18,13 @@ pyvenv.cfg
 bulk-7506408014192.jsonl
 test_files/
 src/query_test.py
+products_sales_update.py
+shopify_notebook_inventory.ipynb
+shopify_notebook_with_addresses.ipynb
+shopify_notebook_with_customers.ipynb
+testing_orders.py
+share/
+shopify_notebook_with_orders.ipynb
+shopify_notebook_with_functions.ipynb
+notebooks/
+package.json
