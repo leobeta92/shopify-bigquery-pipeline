@@ -1,6 +1,6 @@
 # Shopify → BigQuery ELT Pipeline
 
-An automated Python ELT pipeline that extracts order and product sales data from the Shopify GraphQL API and loads it into Google BigQuery. Scheduled via GitHub Actions.
+An automated Python ELT pipeline that extracts order and product sales data from the Shopify GraphQL API and loads it into Google BigQuery. Scheduled via Google Cloud Run job.
 
 ---
 
@@ -23,13 +23,6 @@ Data is written to the `shopify` dataset in BigQuery. Orders updates use a MERGE
 
 ```
 .
-├── .github/
-│   └── workflows/
-│       ├── orders_pipeline.yml       # Scheduled: incremental orders update
-│       └── products_orders_pipeline.yml       # Scheduled: product sales (line items) load
-│       └── collections_pipeline.yml       # Scheduled: collections and products in those collections load
-│       └── products_variants_pipeline.yml       # Scheduled: product and variants information load
-│
 ├── src/
 │   ├── utils.py                    # Shopify auth, API calls, bulk query polling
 │   ├── df_functions.py             # Raw data → pandas DataFrames
@@ -107,7 +100,7 @@ SHOPIFY_STORE_URL=your-store.myshopify.com
 Authentication is handled automatically in code depending on the execution environment:
 
 - **Locally** — place your GCP service account key file at the project root named `cloud_python_private_key.json`. The pipeline detects the absence of `GCP_SERVICE_ACCOUNT_KEY` and falls back to this file.
-- **GitHub Actions** — the full service account JSON is read from the `GCP_SERVICE_ACCOUNT_KEY` secret and parsed at runtime. No key file is needed in the repo.
+- **Cloud Run** — the full service account JSON is read from the `GCP_SERVICE_ACCOUNT_KEY` secret and parsed at runtime. No key file is needed in the repo.
 
 > Never commit `cloud_python_private_key.json`. Add it to `.gitignore`.
 
@@ -141,7 +134,7 @@ python variants_information.py
 
 ---
 
-## GitHub Actions (Scheduled Runs)
+## Google Cloud Run (Scheduled Runs)
 
 Two workflows run on cron schedules:
 
@@ -152,9 +145,7 @@ Two workflows run on cron schedules:
 | `products_variants_pipeline.yml` | `products_information.py` `variants_information.py` | Loads product and variant information data |
 | `collections_pipeline.yml` | `collections_shopify.py` | Loads collections data |
 
-### Secrets required in GitHub
-
-Add the following to your repository's **Settings → Secrets and variables → Actions**.
+### Secrets required in GCP Managed Secrets
 
 **Shared across all workflows:**
 
